@@ -1,5 +1,5 @@
 #define num_medias 20
-#define tolerancia_ldr 10
+#define tolerancia_ldr 30.0
 
 
 int calib_line_follow[2]; //PRIMEIRA POSICAO CALIBRACAO ESQUERDA, SEGUNDA POSICAO CALIB DIREITA
@@ -50,6 +50,8 @@ void calibra_line_follow(){
   lcd.setCursor(0,1);
   lcd.print(calib_line_follow[1]);
   delay(5000);
+
+  lcd.clear();
 }
 
 void line_follow(){
@@ -58,22 +60,64 @@ void line_follow(){
   motor1->setSpeed(mot1);
   motor2->setSpeed(mot2);
 
-  int reduz1 = mot1 * 0.8;
-  int reduz2 = mot2 * 0.8;
+  int reduz1 = 75;
+  int reduz2 = 100;
   while(1){
     valor_LDR_R = analogRead(LDR_R);
     valor_LDR_L = analogRead(LDR_L);
+
+    lcd.setCursor(0,0);
+    lcd.print(valor_LDR_L);
+    lcd.setCursor(8,0);
+    lcd.print(valor_LDR_R);
+
     if(valor_LDR_L < calib_line_follow[0]){
-      motor1->setSpeed(reduz1);
-      while(valor_LDR_L < calib_line_follow[0]);
+      motor1->setSpeed(0);
+      while(valor_LDR_L < calib_line_follow[0]){
+        //delay(1000);
+        valor_LDR_L = analogRead(LDR_L);
+        valor_LDR_R = analogRead(LDR_R);
+
+        lcd.setCursor(0,0);
+        lcd.print(valor_LDR_L);
+        lcd.setCursor(8,0);
+        lcd.print(valor_LDR_R);
+      }
       motor1->setSpeed(mot1);
     }
     if(valor_LDR_R < calib_line_follow[1]){
-      motor2->setSpeed(reduz2);
-      while(valor_LDR_R < calib_line_follow[1]);
+      motor2->setSpeed(0);
+      while(valor_LDR_R < calib_line_follow[1]){
+        //delay(1000);
+        valor_LDR_L = analogRead(LDR_L);
+        valor_LDR_R = analogRead(LDR_R);
+
+        lcd.setCursor(0,0);
+        lcd.print(valor_LDR_L);
+        lcd.setCursor(8,0);
+        lcd.print(valor_LDR_R);
+      }
       motor2->setSpeed(mot2);
     }
+    if(valor_LDR_L < calib_line_follow[0] && valor_LDR_R < calib_line_follow[1]){
+      motor1->setSpeed(0);
+      while(valor_LDR_L < calib_line_follow[0] && valor_LDR_R < calib_line_follow[1]){
+        //delay(1000);
+        valor_LDR_L = analogRead(LDR_L);
+        valor_LDR_R = analogRead(LDR_R);
 
+        lcd.setCursor(0,0);
+        lcd.print(valor_LDR_L);
+        lcd.setCursor(8,0);
+        lcd.print(valor_LDR_R);
+      }
+      motor1->setSpeed(mot1);
+    }
   }
 }
+
+
+
+
+
 
