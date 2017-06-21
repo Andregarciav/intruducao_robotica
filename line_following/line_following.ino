@@ -10,8 +10,8 @@
 #define LDR_R 14
 
 //DEFINIÇÃO DOS MOTORES
-#define mot1 250 //Potência motor 1
-#define mot2 222 // Potência motor 1
+#define mot1 130 //Potência motor 1
+#define mot2 180 // Potência motor 1
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *motor1 = AFMS.getMotor(1);    //chama motor 1 no rele 3
 Adafruit_DCMotor *motor2 = AFMS.getMotor(2);    //chama motor 2 no rele 4 MOTOR DOIS GIRO INVERTIDO
@@ -54,6 +54,12 @@ void loop ()
   delay(1000);                       
 
   calibra_line_follow();
+  delay(3000);
+  
+  valor_LDR_R = analogRead(LDR_R);
+  valor_LDR_L = analogRead(LDR_L);
+  delay(100);
+  line_follow();
 }
 
 
